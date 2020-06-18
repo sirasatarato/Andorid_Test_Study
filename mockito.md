@@ -164,3 +164,37 @@ fun example() {
 2. junit의 실패했다고 알리는 메소드
 3. 에러 메시지와 같은지 단언
 
+## verify
+> verifiy()는 해당 구문이 호출 되었는지를 체크하는 메소드
+```
+@Test
+fun example(){
+    val p = mock(Person::class.java)
+    val name = "JDM"
+    p.setName(name)
+
+    // n번 호출했는지 체크
+    verify(p, times(1)).setName(anyString())            // success
+
+    // 호출 안했는지 체크
+    verify(p, never()).getName()                        // success
+    verify(p, never()).setName("ETC")                   // success
+    verify(p, never()).setName("JDM")                   // fail
+
+    // 최소한 1번 이상 호출했는지 체크
+    verify(p, atLeastOnce()).setName(anyString())                 // success
+
+    // 2번 이하 호출 했는지 체크
+    verify(p, atMost(2)).setName(anyString())                     // success
+
+    // 2번 이상 호출 했는지 체크
+    verify(p, atLeast(2)).setName(anyString())                    // fail
+
+    // 지정된 시간(millis)안으로 메소드를 호출 했는지 체크
+    verify(p, timeout(100)).setName(anyString())                  // success
+
+    // 지정된 시간(millis)안으로 1번 이상 메소드를 호출 했는지 체크
+    verify(p, timeout(100).atLeast(1)).setName(anyString())       // success
+}
+```
+
