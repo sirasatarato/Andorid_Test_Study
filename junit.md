@@ -38,3 +38,43 @@
 - assertNotSame: 두 변수가 다른 인스턴스를 가리키고 있는지 단언
 - assertThat: 주어진 객체가 특정 조건을 만족한지 단언
 
+## Rule
+> AndroidX 테스트에는 AndroidJUnitRunner와 함께 사용되는 JUnit 규칙 세트가 포함되어 있다.
+
+- ActivityTestRule
+```
+    @RunWith(AndroidJUnit4::class.java)
+    @LargeTest
+    class MyClassTest {
+        @get:Rule
+        val activityRule = ActivityTestRule(MyClass::class.java)
+
+        @Test fun myClassMethod_ReturnsTrue() { ... }
+    }
+```
+- ServiceTestRule
+```
+    @RunWith(AndroidJUnit4::class.java)
+    @MediumTest
+    class MyServiceTest {
+        @get:Rule
+        val serviceRule = ServiceTestRule()
+
+        @Test fun testWithStartedService() {
+            serviceRule.startService(
+                Intent(ApplicationProvider.getApplicationContext<Context>(),
+                MyService::class.java))
+
+            // Add your test code here.
+        }
+
+        @Test fun testWithBoundService() {
+            val binder = serviceRule.bindService(
+                Intent(ApplicationProvider.getApplicationContext(),
+                MyService::class.java))
+            val service = (binder as MyService.LocalBinder).service
+            assertThat(service.doSomethingToReturnTrue()).isTrue()
+        }
+    }
+```
+
