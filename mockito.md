@@ -115,3 +115,52 @@ when(mockIns.getList(eq("JDM"), anyInt()))
 > kotlin에는 when이라는 자바로 치자면 switch같은 예약어가 있기 때문에  
 kotlin에서 mockito의 when을 ''안에 감싸서 사용해야 한다.
 
+## doThrow
+> doThrow()는 예외를 던지고 싶을 때 활용한다.
+
+아래 예제는 객체 안의 name을 특정 문자열로 지정했을시 예외가 발생한다.
+```
+@Test(expected = IllegalArgumentException.class)
+fun example(){
+    val p = mock(Person::class.java)
+    doThrow(IllegalArgumentException()).`when`(p).setName("JDM")
+    p.setName("JDM")
+}
+```
+## doNothing
+> void(또는 Unit)로 선언된 메소드에 when()를 사용할 때 doNothing()을 사용한다.
+```
+@Test
+fun example(){
+    val p = mock(Person::class.java)
+    doNothing().`when`(p).setAge(anyInt())
+    p.setAge(20)
+    verify(p).setAge(anyInt())
+}
+```
+
+## Exception
+> 어떤 메소드를 호출했을 때 Exception이 발생되도록 설정 할 수 있다.
+```
+@Test
+fun example() {
+    val example = mock(Example::class.java)
+
+    `when`(example.getStr(anyInt())).thenReturn("string")
+    assertEquals("string", example.getStr(10))
+
+    `when`(example.getStr(20)).thenThrow(IllegalStateException("Exception happened!"))    // 1
+
+    try {
+        example.getStr(20)
+        fail()    // 2
+    } catch (e: IllegalStateException) {
+        assertEquals(e.message, "Exception happened!")    // 3
+    }
+}
+```
+
+1. 20을 인자로 getStr 함수를 호출할 경우 예외 발생하도록 설정
+2. junit의 실패했다고 알리는 메소드
+3. 에러 메시지와 같은지 단언
+
