@@ -198,3 +198,46 @@ fun example(){
 }
 ```
 
+## InjectMocks
+> 클래스 내부에 다른 클래스를 포함하는 경우 외부에서 주입할 수 있도록 @InjectMocks 어노테이션을 사용
+```
+public class AuthService{
+    private var dao: AuthDao? = null
+
+    fun isLogin(id: String): Boolean{
+        val isLogin = dao.isLogin(id)
+        if( isLogin ){
+            // some code...
+        }
+        return isLogin
+    }
+}
+class AuthDao {
+    fun isLogin(id: String): Boolean { //some code ... }
+}
+
+//--------------------------------------------------------------------------
+
+@Mock
+lateinit var dao: AuthDao
+
+@InjectMocks
+lateinit var service: AuthService
+
+@Test
+fun example(){
+    MockitoAnnotations.initMocks(this)
+    `when`(dao.isLogin("JDM")).thenReturn(true)
+    assertTrue(service.isLogin("JDM"))
+    assertTrue(!service.isLogin("ETC"))
+}
+```
+
+## Spy
+> Spy로 선언된 목 객체는 목 메소드 stub를 별도로 만들지 않고 실제 메소드가 호출
+```
+val p = spy(Person::class.java)
+val p1 = spy(Person())
+@Spy
+var p2: Person? = null
+```
