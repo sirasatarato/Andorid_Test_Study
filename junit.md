@@ -78,3 +78,38 @@
     }
 ```
 
+#### Add Robolectric
+> 로컬 JVM 또는 실제 기기에서 실제 Android 프레임워크 코드 및 가짜 네이티브 프레임워크 코드를 실행
+```
+    android {
+        // ...
+        testOptions {
+            unitTests.includeAndroidResources = true
+        }
+    }
+
+//--------------------------------------------------------------------------
+
+    import android.content.Context
+    import androidx.test.core.app.ApplicationProvider
+    import com.google.common.truth.Truth.assertThat
+    import org.junit.Test
+
+    private const val FAKE_STRING = "HELLO_WORLD"
+
+    class UnitTestSample {
+        val context = ApplicationProvider.getApplicationContext<Context>()
+
+        @Test fun readStringFromContext_LocalizedString() {
+            // Given a Context object retrieved from Robolectric...
+            val myObjectUnderTest = ClassUnderTest(context)
+
+            // ...when the string is returned from the object under test...
+            val result: String = myObjectUnderTest.getHelloWorldString()
+
+            // ...then the result should be the expected one.
+            assertThat(result).isEqualTo(FAKE_STRING)
+        }
+    }
+    
+```
