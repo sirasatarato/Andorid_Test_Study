@@ -27,3 +27,14 @@
 - @SdkSupress: minSdkVersion을 지정
 - @SmallTest, @MediumTest, @LargeTest: 테스트 성격을 구분하여 테스트
 
+## assert
+- assertEquals: 같은 객체인지 단언
+- assertArrayEquals: 같은 배열인지 단언
+- assrtTrue: 참인지 단언
+- assertFalse: 거짓인지 단언
+- assertNull; null인지 단언
+- assertNotNull: null이 아닌지 단언
+- assertSame: 두 변수가 같은 인스턴스를 가리키고 있는지 단언
+- assertNotSame: 두 변수가 다른 인스턴스를 가리키고 있는지 단언
+- assertThat: 주어진 객체가 특정 조건을 만족한지 단언
+
