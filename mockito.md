@@ -69,3 +69,49 @@ val example = mock(Example::class.java)
 `when`(example.getStr(100)).thenReturn("string")
 ```
 
+## mock 객체
+#### 생성하는 법
+1. test메소드 안에 mock() 메소드로 객체를 생성
+2. 외부에서 해당 객체로 선언된 변수 위에 @Mock을 추가 
+```
+@Test
+fun example(){
+    val p = mock(Person::class.java)
+}
+
+//--------------------------------------------------------------------------
+
+@Mock
+var p: Person? = null
+
+@Test
+fun example() {
+    MockitoAnnotations.initMocks(this)
+    assertTrue(p != null)
+}
+```
+
+## When
+> when()은 특정 mock 객체부터 특정 조건을 지정하도록 사용하는 메소드
+
+아래 예제는 자바로 코딩되었습니다.
+```
+public List<String> getList(String name, int age){ // do something code }
+
+when(mockIns.getList(anyString(), anyInt()))
+    .thenReturn(
+        new ArrayList<String>(){
+            { this.add("JDM"); this.add("BLOG"); }
+        }
+    );
+```
+**Tip**  
+만약 특정 값을 넣어야 한다면 eq() 메소드를 활용한다.
+```
+when(mockIns.getList(eq("JDM"), anyInt()))
+```
+
+#### kotlin에서의 when
+> kotlin에는 when이라는 자바로 치자면 switch같은 예약어가 있기 때문에  
+kotlin에서 mockito의 when을 ''안에 감싸서 사용해야 한다.
+
